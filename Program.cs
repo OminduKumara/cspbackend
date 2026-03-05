@@ -15,7 +15,6 @@ builder.Services.AddControllers();
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
 
 // Use AZURE_SQL_CONNECTIONSTRING environment variable if set, otherwise fall back to config
 var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING") 
@@ -93,19 +92,9 @@ var app = builder.Build();
 // Skip database startup tasks to ensure app starts quickly
 // Database will be created on first API call if needed
 
-// Enable Swagger UI for testing in all environments
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TMS API V1");
-    c.RoutePrefix = "swagger"; // Access at /swagger
-});
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+// Enable OpenAPI documentation for testing
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.UseCors("AllowLocalhost");
 
