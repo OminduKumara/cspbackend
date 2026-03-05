@@ -22,15 +22,11 @@ WORKDIR /app
 # Copy published app from build stage
 COPY --from=build /app/publish .
 
-# Expose port 5000 (HTTP) and 5001 (HTTPS)
-EXPOSE 5000 5001
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:5000/health || exit 1
+# Expose the HTTP port used by Azure App Service container probes
+EXPOSE 8080
 
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 # Run the application

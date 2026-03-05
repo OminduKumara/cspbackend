@@ -16,8 +16,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var databaseServerVersion = builder.Configuration["Database:ServerVersion"] ?? "8.0.36";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(databaseServerVersion)))
 );
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -131,6 +132,10 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex) when (ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
     {
         logger.LogWarning(ex, "Table(s) already exist. Continuing startup without applying migrations.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(ex, "Database migration skipped because the database is unavailable during startup. The application will continue to start.");
     }
 }
 
