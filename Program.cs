@@ -90,52 +90,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Apply EF Core migrations at startup (ensures schema is created/updated)
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var logger = scope.ServiceProvider
-        .GetRequiredService<ILoggerFactory>()
-        .CreateLogger("StartupMigration");
-
-    try
-    {
-        // Quick attempt to check schema with a timeout
-        var schemaAlreadyExists = false;
-        try
-        {
-            var connection = dbContext.Database.GetDbConnection();
-            if (connection.State != ConnectionState.Open)
-            {
-                connection.Open();
-            }
-
-            using var command = connection.CreateCommand();
-            command.CommandTimeout = 5; // 5 second timeout
-            command.CommandText = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = DB_NAME() AND (TABLE_NAME = 'Users' OR TABLE_NAME = 'Roles')";
-            var result = command.ExecuteScalar();
-            schemaAlreadyExists = Convert.ToInt32(result ?? 0) > 0;
-        }
-        catch (Exception checkEx)
-        {
-            logger.LogWarning(checkEx, "Could not check existing schema. Proceeding with migration attempt.");
-            schemaAlreadyExists = false;
-        }
-
-        if (schemaAlreadyExists)
-        {
-            logger.LogWarning("Existing database tables detected. Skipping automatic migration.");
-        }
-        else
-        {
-            dbContext.Database.Migrate();
-        }
-    }
-    catch (Exception ex)
-    {
-        logger.LogWarning(ex, "Database migration skipped. Application will start anyway.");
-    }
-}
+// Skip database startup tasks to ensure app starts quickly
+// Database will be created on first API call if needed
 
 // Enable Swagger UI for testing in all environments
 app.UseSwagger();
