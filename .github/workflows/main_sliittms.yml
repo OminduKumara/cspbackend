@@ -8,6 +8,7 @@ env:
   DOTNET_VERSION: 10.0.x
   PROJECT_PATH: ./tmsserver.csproj
   PUBLISH_PATH: ./publish
+  STARTUP_COMMAND: dotnet tmsserver.dll
 
 on:
   push:
@@ -63,4 +64,5 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           package: ./.net-app
+          startup-command: ${{ env.STARTUP_COMMAND }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76FF78833BC6491E9DB074ACC608F5AB }}
