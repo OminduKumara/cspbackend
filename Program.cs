@@ -108,7 +108,7 @@ using (var scope = app.Services.CreateScope())
         try
         {
             using var command = connection.CreateCommand();
-            command.CommandText = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = @tableName";
+            command.CommandText = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = DB_NAME() AND TABLE_NAME = @tableName";
 
             var parameter = command.CreateParameter();
             parameter.ParameterName = "@tableName";
