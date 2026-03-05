@@ -11,6 +11,7 @@ using tmsserver.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure services
 builder.Services.AddControllers();
  
 builder.Services.AddEndpointsApiExplorer();
