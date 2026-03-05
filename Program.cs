@@ -17,13 +17,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
-// Use AZURE_SQL_CONNECTIONSTRING environment variable if set, otherwise fall back to config
-var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// Use AZURE_SQL_CONNECTIONSTRING environment variable
+var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection string 'DefaultConnection' or environment variable 'AZURE_SQL_CONNECTIONSTRING' is not configured.");
+    throw new InvalidOperationException("Environment variable 'AZURE_SQL_CONNECTIONSTRING' is not configured.");
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -90,10 +89,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Skip database startup tasks to ensure app starts quickly
-// Database will be created on first API call if needed
-
-// Enable OpenAPI documentation for testing
 app.MapOpenApi();
 app.MapScalarApiReference();
 
