@@ -64,5 +64,13 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           package: ./.net-app
-          startup-command: ${{ env.STARTUP_COMMAND }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76FF78833BC6491E9DB074ACC608F5AB }}
+      
+      - name: Reminder - Configure Database Connection
+        run: |
+          echo "::notice::To complete deployment, set the environment variable in Azure App Service:"
+          echo "::notice::1. Go to Azure Portal → App Service 'sliittms' → Configuration"
+          echo "::notice::2. Under 'Application settings' add: DB_CONNECTION_STRING"
+          echo "::notice::3. Set value to your MySQL connection string:"
+          echo "::notice::   Server=<host>;Port=3306;Database=<db>;User=<user>;Password=<pass>"
+          echo "::notice::4. Save and restart the app"
