@@ -1,4 +1,4 @@
-using MySqlConnector;
+using Microsoft.Data.SqlClient;
 using tmsserver.Models;
 
 namespace tmsserver.Data.Repositories;
@@ -31,7 +31,7 @@ public class UserRepository : IUserRepository
     public async Task<List<User>> GetAllUsersAsync()
     {
         var users = new List<User>();
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -50,7 +50,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByIdAsync(int id)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -70,7 +70,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByUsernameAsync(string username)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -90,7 +90,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByEmailAsync(string email)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -110,7 +110,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByIdentityNumberAsync(string identityNumber)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -131,7 +131,7 @@ public class UserRepository : IUserRepository
     public async Task<List<User>> GetUsersByRoleAsync(UserRole role)
     {
         var users = new List<User>();
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -152,7 +152,7 @@ public class UserRepository : IUserRepository
     public async Task<List<User>> GetPendingApprovalsAsync()
     {
         var users = new List<User>();
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -172,7 +172,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User> CreateUserAsync(User user)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -200,7 +200,7 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> UpdateUserAsync(User user)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -228,7 +228,7 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> ApproveUserAsync(int userId, int approvedByAdminId)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -250,7 +250,7 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> DeleteUserAsync(int id)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -262,7 +262,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    private User BuildUserFromReader(MySqlDataReader reader)
+    private User BuildUserFromReader(SqlDataReader reader)
     {
         return new User
         {

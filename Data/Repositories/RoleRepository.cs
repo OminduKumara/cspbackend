@@ -1,4 +1,4 @@
-using MySqlConnector;
+using Microsoft.Data.SqlClient;
 using tmsserver.Models;
 
 namespace tmsserver.Data.Repositories;
@@ -26,7 +26,7 @@ public class RoleRepository : IRoleRepository
     public async Task<List<RoleEntity>> GetAllRolesAsync()
     {
         var roles = new List<RoleEntity>();
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -45,7 +45,7 @@ public class RoleRepository : IRoleRepository
 
     public async Task<RoleEntity?> GetRoleByIdAsync(int id)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -65,7 +65,7 @@ public class RoleRepository : IRoleRepository
 
     public async Task<RoleEntity?> GetRoleByNameAsync(string name)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -85,7 +85,7 @@ public class RoleRepository : IRoleRepository
 
     public async Task<RoleEntity> CreateRoleAsync(RoleEntity role)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -110,7 +110,7 @@ public class RoleRepository : IRoleRepository
 
     public async Task<bool> UpdateRoleAsync(RoleEntity role)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -131,7 +131,7 @@ public class RoleRepository : IRoleRepository
 
     public async Task<bool> DeleteRoleAsync(int id)
     {
-        using (var connection = new MySqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
@@ -143,7 +143,7 @@ public class RoleRepository : IRoleRepository
         }
     }
 
-    private RoleEntity BuildRoleFromReader(MySqlDataReader reader)
+    private RoleEntity BuildRoleFromReader(SqlDataReader reader)
     {
         return new RoleEntity
         {

@@ -70,7 +70,7 @@ jobs:
         run: |
           echo "::notice::To complete deployment, ensure the following environment variable is set in Azure App Service:"
           echo "::notice::1. Go to Azure Portal → App Service 'sliittms' → Configuration"
-          echo "::notice::2. Verify 'Application settings' has: AZURE_MYSQL_AZURE_MYSQL_CONNECTIONSTRING_CONNECTIONSTRING"
-          echo "::notice::3. Value should be:"
-          echo "::notice::   Server=sliittms-server.mysql.database.azure.com;Port=3306;User=epxdbyfcvk;Password=Omindu@2003;SslMode=Required"
+          echo "::notice::2. Verify 'Application settings' has: AZURE_SQL_CONNECTIONSTRING"
+          echo "::notice::3. Value should be your SQL Server connection string:"
+          echo "::notice::   Server=tcp:sliit.database.windows.net,1433;Initial Catalog=free-sql-db-3836547;Persist Security Info=False;User ID=sliit;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
           echo "::notice::4. Save and restart the app"

@@ -15,18 +15,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
-// Use AZURE_MYSQL_AZURE_MYSQL_CONNECTIONSTRING_CONNECTIONSTRING environment variable if set, otherwise fall back to config
-var connectionString = Environment.GetEnvironmentVariable("AZURE_MYSQL_AZURE_MYSQL_CONNECTIONSTRING_CONNECTIONSTRING") 
+// Use AZURE_SQL_CONNECTIONSTRING environment variable if set, otherwise fall back to config
+var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING") 
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection string 'DefaultConnection' or environment variable 'AZURE_MYSQL_AZURE_MYSQL_CONNECTIONSTRING_CONNECTIONSTRING' is not configured.");
+    throw new InvalidOperationException("Connection string 'DefaultConnection' or environment variable 'AZURE_SQL_CONNECTIONSTRING' is not configured.");
 }
 
-var databaseServerVersion = builder.Configuration["Database:ServerVersion"] ?? "8.0.36";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(databaseServerVersion)))
+    options.UseSqlServer(connectionString)
 );
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
