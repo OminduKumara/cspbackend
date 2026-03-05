@@ -81,7 +81,8 @@ builder.Services.AddCors(options =>
                 "https://csp-group-4.vercel.app"
             )
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
