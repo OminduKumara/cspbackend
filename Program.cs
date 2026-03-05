@@ -15,6 +15,7 @@ builder.Services.AddControllers();
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 // Use AZURE_SQL_CONNECTIONSTRING environment variable if set, otherwise fall back to config
 var connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING") 
@@ -152,6 +153,14 @@ using (var scope = app.Services.CreateScope())
         logger.LogWarning(ex, "Database migration skipped because the database is unavailable during startup. The application will continue to start.");
     }
 }
+
+// Enable Swagger UI for testing in all environments
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TMS API V1");
+    c.RoutePrefix = "swagger"; // Access at /swagger
+});
 
 if (app.Environment.IsDevelopment())
 {
