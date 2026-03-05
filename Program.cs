@@ -15,13 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
-// Use DB_CONNECTION_STRING environment variable if set, otherwise fall back to config
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") 
+// Use AZURE_MYSQL_CONNECTIONSTRING environment variable if set, otherwise fall back to config
+var connectionString = Environment.GetEnvironmentVariable("AZURE_MYSQL_CONNECTIONSTRING") 
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection string 'DefaultConnection' or environment variable 'DB_CONNECTION_STRING' is not configured.");
+    throw new InvalidOperationException("Connection string 'DefaultConnection' or environment variable 'AZURE_MYSQL_CONNECTIONSTRING' is not configured.");
 }
 
 var databaseServerVersion = builder.Configuration["Database:ServerVersion"] ?? "8.0.36";

@@ -70,7 +70,7 @@ jobs:
         run: |
           echo "::notice::To complete deployment, set the environment variable in Azure App Service:"
           echo "::notice::1. Go to Azure Portal → App Service 'sliittms' → Configuration"
-          echo "::notice::2. Under 'Application settings' add: DB_CONNECTION_STRING"
+          echo "::notice::2. Under 'Application settings' add: AZURE_MYSQL_CONNECTIONSTRING"
           echo "::notice::3. Set value to your MySQL connection string:"
-          echo "::notice::   Server=<host>;Port=3306;Database=<db>;User=<user>;Password=<pass>"
+          echo "::notice::   Server=sliittms-server.mysql.database.azure.com;Port=3306;User=epxdbyfcvk;Password=Omindu@2003;SslMode=Required"
           echo "::notice::4. Save and restart the app"
