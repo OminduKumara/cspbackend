@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Data;
@@ -26,6 +27,7 @@ if (string.IsNullOrEmpty(connectionString))
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
+           .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
 );
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
