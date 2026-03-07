@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using tmsserver.Data;
 using tmsserver.Data.Repositories;
 using tmsserver.Models;
 using tmsserver.Services;
@@ -16,7 +15,6 @@ public class AuthController : ControllerBase
 {
     private readonly IConfiguration _config;
     private readonly UserService _userService;
-    private readonly ApplicationDbContext _context;
     private readonly IUserRepository _userRepository;
     private readonly IRegistrationRequestRepository _registrationRequestRepository;
     private readonly AuthSvc _authorizationService;
@@ -24,14 +22,12 @@ public class AuthController : ControllerBase
     public AuthController(
         IConfiguration config,
         UserService userService,
-        ApplicationDbContext context,
         IUserRepository userRepository,
         IRegistrationRequestRepository registrationRequestRepository,
         AuthSvc authorizationService)
     {
         _config = config;
         _userService = userService;
-        _context = context;
         _userRepository = userRepository;
         _registrationRequestRepository = registrationRequestRepository;
         _authorizationService = authorizationService;
@@ -113,8 +109,7 @@ public class AuthController : ControllerBase
                 Status = "Pending",
                 CreatedAt = DateTime.UtcNow
             };
-            _context.RegistrationRequests.Add(registrationRequest);
-            await _context.SaveChangesAsync();
+            await _registrationRequestRepository.CreateRequestAsync(registrationRequest);
 
             return Ok(new { 
                 message = "Registration submitted successfully. Please wait for admin approval.",

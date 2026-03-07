@@ -2,37 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using tmsserver.Data;
+using tmsserver.Data.Repositories;
 using tmsserver.Models;
 
 public class UserService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IUserRepository _userRepository;
+    private readonly IRegistrationRequestRepository _registrationRequestRepository;
 
-    public UserService(ApplicationDbContext context)
+    public UserService(
+        IUserRepository userRepository,
+        IRegistrationRequestRepository registrationRequestRepository)
     {
-        _context = context;
-    }
-
-    public User? FindUserByUsername(string username)
-    {
-        return _context.Users.FirstOrDefault(u => u.Username == username);
-    }
-
-    public User? FindUserByEmail(string email)
-    {
-        return _context.Users.FirstOrDefault(u => u.Email == email);
-    }
-
-    public User? FindUserByIdentityNumber(string identityNumber)
-    {
-        return _context.Users.FirstOrDefault(u => u.IdentityNumber == identityNumber);
-    }
-
-    public User? FindUserById(int id)
-    {
-        return _context.Users.FirstOrDefault(u => u.Id == id);
+        _userRepository = userRepository;
+        _registrationRequestRepository = registrationRequestRepository;
     }
 
     public bool ValidatePassword(string password, string hash)
@@ -80,17 +63,17 @@ public class UserService
         }
 
         
-        if (FindUserByUsername(username) != null)
+        if (await _userRepository.GetUserByUsernameAsync(username) != null)
         {
             throw new Exception("Username already exists");
         }
 
-        if (FindUserByEmail(email) != null)
+        if (await _userRepository.GetUserByEmailAsync(email) != null)
         {
             throw new Exception("Email already registered");
         }
 
-        if (FindUserByIdentityNumber(identityNumber) != null)
+        if (await _userRepository.GetUserByIdentityNumberAsync(identityNumber) != null)
         {
             throw new Exception("Identity number already registered");
         }
@@ -106,65 +89,63 @@ public class UserService
             CreatedAt = DateTime.UtcNow
         };
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        await _userRepository.CreateUserAsync(user);
 
         return user;
     }
 
     public async Task<bool> ApproveRegistrationAsync(int userId, int adminId)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Id == userId && u.Role == UserRole.PendingPlayer);
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user != null && user.Role != UserRole.PendingPlayer)
+        {
+            user = null;
+        }
         if (user == null)
         {
             throw new Exception("User not found or already processed");
         }
 
-        user.Role = UserRole.Player;
-        user.IsApproved = true;
-        user.ApprovedByAdminId = adminId;
-        user.ApprovedAt = DateTime.UtcNow;
-
-        var registrationRequest = _context.RegistrationRequests.FirstOrDefault(r => r.UserId == userId);
-        if (registrationRequest != null)
+        var approved = await _userRepository.ApproveUserAsync(userId, adminId);
+        if (!approved)
         {
-            registrationRequest.Status = "Approved";
-            registrationRequest.ReviewedByAdminId = adminId;
-            registrationRequest.ReviewedAt = DateTime.UtcNow;
+            throw new Exception("Failed to approve user");
         }
 
-        await _context.SaveChangesAsync();
+        var registrationRequest = await _registrationRequestRepository.GetRequestByUserIdAsync(userId);
+        if (registrationRequest != null)
+        {
+            await _registrationRequestRepository.ApproveRequestAsync(registrationRequest.Id, adminId);
+        }
+
         return true;
     }
 
     public async Task<bool> RejectRegistrationAsync(int userId, int adminId, string? reason = null)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Id == userId && u.Role == UserRole.PendingPlayer);
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user != null && user.Role != UserRole.PendingPlayer)
+        {
+            user = null;
+        }
         if (user == null)
         {
             throw new Exception("User not found or already processed");
         }
 
-        var registrationRequest = _context.RegistrationRequests.FirstOrDefault(r => r.UserId == userId);
+        var registrationRequest = await _registrationRequestRepository.GetRequestByUserIdAsync(userId);
         if (registrationRequest != null)
         {
-            registrationRequest.Status = "Rejected";
-            registrationRequest.ReviewedByAdminId = adminId;
-            registrationRequest.ReviewedAt = DateTime.UtcNow;
-            registrationRequest.RejectionReason = reason;
+            await _registrationRequestRepository.RejectRequestAsync(registrationRequest.Id, adminId, reason ?? "Rejected by admin");
         }
 
-        // Delete the pending user
-        _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
+        await _userRepository.DeleteUserAsync(userId);
         return true;
     }
 
     public async Task<List<User>> GetPendingRegistrationsAsync()
     {
-        return await _context.Users
-            .Where(u => u.Role == UserRole.PendingPlayer && !u.IsApproved)
-            .ToListAsync();
+        return await _userRepository.GetPendingApprovalsAsync();
     }
 
     public static string HashPassword(string password)
