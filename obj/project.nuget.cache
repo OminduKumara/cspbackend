@@ -1,0 +1,90 @@
+{
+  "version": 2,
+  "dgSpecHash": "5JshZiy1OJk=",
+  "success": true,
+  "projectFilePath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+  "expectedPackageFiles": [
+    "/Users/omindu/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/dotnetenv/3.1.1/dotnetenv.3.1.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/9.0.0/microsoft.aspnetcore.authentication.jwtbearer.9.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.aspnetcore.openapi/10.0.3/microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.1/microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.data.sqlclient/5.1.5/microsoft.data.sqlclient.5.1.5.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.data.sqlclient.sni.runtime/5.1.1/microsoft.data.sqlclient.sni.runtime.5.1.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identity.client/4.56.0/microsoft.identity.client.4.56.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identity.client.extensions.msal/4.56.0/microsoft.identity.client.extensions.msal.4.56.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identitymodel.abstractions/8.3.1/microsoft.identitymodel.abstractions.8.3.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.3.1/microsoft.identitymodel.jsonwebtokens.8.3.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identitymodel.logging/8.3.1/microsoft.identitymodel.logging.8.3.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identitymodel.protocols/8.0.1/microsoft.identitymodel.protocols.8.0.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/8.0.1/microsoft.identitymodel.protocols.openidconnect.8.0.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.identitymodel.tokens/8.3.1/microsoft.identitymodel.tokens.8.3.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.sqlserver.server/1.0.0/microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/netstandard.library/1.6.1/netstandard.library.1.6.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/scalar.aspnetcore/1.2.63/scalar.aspnetcore.1.2.63.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/sprache/2.3.1/sprache.2.3.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.configuration.configurationmanager/6.0.1/system.configuration.configurationmanager.6.0.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.drawing.common/6.0.0/system.drawing.common.6.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.identitymodel.tokens.jwt/8.3.1/system.identitymodel.tokens.jwt.8.3.1.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.io.filesystem.accesscontrol/5.0.0/system.io.filesystem.accesscontrol.5.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.memory.data/1.0.2/system.memory.data.1.0.2.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.runtime.caching/6.0.0/system.runtime.caching.6.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.security.cryptography.protecteddata/6.0.0/system.security.cryptography.protecteddata.6.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.security.permissions/6.0.0/system.security.permissions.6.0.0.nupkg.sha512",
+    "/Users/omindu/.nuget/packages/system.windows.extensions/6.0.0/system.windows.extensions.6.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9",
+      "projectPath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "libraryId": "Azure.Identity",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-wvxc-855f-jvrv",
+      "projectPath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "libraryId": "Azure.Identity",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'Microsoft.Identity.Client' 4.56.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9",
+      "projectPath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "libraryId": "Microsoft.Identity.Client",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1901",
+      "level": "Warning",
+      "message": "Package 'Microsoft.Identity.Client' 4.56.0 has a known low severity vulnerability, https://github.com/advisories/GHSA-x674-v45j-fwxw",
+      "projectPath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "warningLevel": 1,
+      "filePath": "/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj",
+      "libraryId": "Microsoft.Identity.Client",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}

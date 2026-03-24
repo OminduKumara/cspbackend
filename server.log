@@ -1,0 +1,18 @@
+Using launch settings from /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Properties/launchSettings.json...
+Building...
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-wvxc-855f-jvrv
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Microsoft.Identity.Client' 4.56.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1901: Package 'Microsoft.Identity.Client' 4.56.0 has a known low severity vulnerability, https://github.com/advisories/GHSA-x674-v45j-fwxw
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-wvxc-855f-jvrv
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Microsoft.Identity.Client' 4.56.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1901: Package 'Microsoft.Identity.Client' 4.56.0 has a known low severity vulnerability, https://github.com/advisories/GHSA-x674-v45j-fwxw
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5011
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver

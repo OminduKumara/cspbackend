@@ -180,7 +180,7 @@ public class UserRepository : IUserRepository
             command.CommandText = @"
                 INSERT INTO Users (Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, CreatedAt) 
                 VALUES (@username, @email, @identityNumber, @passwordHash, @role, @isApproved, @createdAt);
-                SELECT LAST_INSERT_ID();";
+                SELECT SCOPE_IDENTITY();";
             
             command.Parameters.AddWithValue("@username", user.Username);
             command.Parameters.AddWithValue("@email", user.Email);

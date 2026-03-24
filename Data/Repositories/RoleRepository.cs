@@ -93,7 +93,7 @@ public class RoleRepository : IRoleRepository
             command.CommandText = @"
                 INSERT INTO Roles (Name, Description, Permissions, CreatedAt)
                 VALUES (@name, @description, @permissions, @createdAt);
-                SELECT LAST_INSERT_ID();";
+                SELECT SCOPE_IDENTITY();";
             
             command.Parameters.AddWithValue("@name", role.Name);
             command.Parameters.AddWithValue("@description", role.Description ?? (object)DBNull.Value);

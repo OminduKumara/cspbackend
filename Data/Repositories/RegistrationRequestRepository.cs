@@ -130,7 +130,7 @@ public class RegistrationRequestRepository : IRegistrationRequestRepository
             command.CommandText = @"
                 INSERT INTO RegistrationRequests (UserId, Status, CreatedAt)
                 VALUES (@userId, @status, @createdAt);
-                SELECT LAST_INSERT_ID();";
+                SELECT SCOPE_IDENTITY();";
             
             command.Parameters.AddWithValue("@userId", request.UserId);
             command.Parameters.AddWithValue("@status", request.Status);
