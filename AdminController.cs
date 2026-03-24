@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using tmsserver.Models;
 using tmsserver.Services;
 using tmsserver.Data.Repositories;
@@ -229,6 +230,8 @@ public class AdminController : ControllerBase
                 u.Username,
                 u.Email,
                 u.IdentityNumber,
+                u.ContactNumber,
+                u.Address,
                 u.Role,
                 u.IsApproved,
                 u.CreatedAt,
@@ -266,6 +269,8 @@ public class AdminController : ControllerBase
                     user.Username,
                     user.Email,
                     user.IdentityNumber,
+                    user.ContactNumber,
+                    user.Address,
                     user.Role,
                     user.IsApproved,
                     user.ApprovedByAdminId,
@@ -279,9 +284,145 @@ public class AdminController : ControllerBase
             return StatusCode(500, new { message = "Error fetching user", error = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Update user details by ID
+    /// </summary>
+    [HttpPut("users/{id}")]
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserByAdminRequest request)
+    {
+        try
+        {
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var username = request.Username?.Trim() ?? string.Empty;
+            var email = request.Email?.Trim() ?? string.Empty;
+            var identityNumber = request.IdentityNumber?.Trim() ?? string.Empty;
+            var contactNumber = request.ContactNumber?.Trim() ?? string.Empty;
+            var address = request.Address?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(identityNumber))
+            {
+                return BadRequest(new { message = "Username, email and identity number are required" });
+            }
+
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                return BadRequest(new { message = "Invalid email format" });
+            }
+
+            if (!string.IsNullOrWhiteSpace(contactNumber) && !Regex.IsMatch(contactNumber, @"^\+?[0-9\s\-]{7,15}$"))
+            {
+                return BadRequest(new { message = "Invalid phone number format" });
+            }
+
+            var existingWithUsername = await _userRepository.GetUserByUsernameAsync(username);
+            if (existingWithUsername != null && existingWithUsername.Id != id)
+            {
+                return BadRequest(new { message = "Username is already taken" });
+            }
+
+            var existingWithEmail = await _userRepository.GetUserByEmailAsync(email);
+            if (existingWithEmail != null && existingWithEmail.Id != id)
+            {
+                return BadRequest(new { message = "Email is already in use" });
+            }
+
+            var existingWithIdentity = await _userRepository.GetUserByIdentityNumberAsync(identityNumber);
+            if (existingWithIdentity != null && existingWithIdentity.Id != id)
+            {
+                return BadRequest(new { message = "Identity number is already in use" });
+            }
+
+            if (!Enum.IsDefined(typeof(UserRole), request.Role))
+            {
+                return BadRequest(new { message = "Invalid role value" });
+            }
+
+            user.Username = username;
+            user.Email = email;
+            user.IdentityNumber = identityNumber;
+            user.ContactNumber = contactNumber;
+            user.Address = address;
+            user.Role = (UserRole)request.Role;
+            user.IsApproved = request.IsApproved;
+
+            if (!string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                if (request.NewPassword.Length < 6)
+                {
+                    return BadRequest(new { message = "Password must be at least 6 characters" });
+                }
+                user.PasswordHash = UserService.HashPassword(request.NewPassword);
+            }
+
+            var adminIdClaim = User.FindFirst("sub")
+                ?? User.FindFirst(ClaimTypes.NameIdentifier)
+                ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
+                ?? User.FindFirst("userId");
+
+            if (request.IsApproved && user.ApprovedByAdminId == null && adminIdClaim != null && int.TryParse(adminIdClaim.Value, out int adminId))
+            {
+                user.ApprovedByAdminId = adminId;
+                user.ApprovedAt = DateTime.UtcNow;
+            }
+
+            if (!request.IsApproved)
+            {
+                user.ApprovedAt = null;
+            }
+
+            var updated = await _userRepository.UpdateUserAsync(user);
+            if (!updated)
+            {
+                return BadRequest(new { message = "Failed to update user" });
+            }
+
+            var refreshedUser = await _userRepository.GetUserByIdAsync(id);
+            return Ok(new
+            {
+                success = true,
+                message = "User updated successfully",
+                data = new
+                {
+                    refreshedUser?.Id,
+                    refreshedUser?.Username,
+                    refreshedUser?.Email,
+                    refreshedUser?.IdentityNumber,
+                    refreshedUser?.ContactNumber,
+                    refreshedUser?.Address,
+                    refreshedUser?.Role,
+                    refreshedUser?.IsApproved,
+                    refreshedUser?.ApprovedByAdminId,
+                    refreshedUser?.CreatedAt,
+                    refreshedUser?.ApprovedAt
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error updating user", error = ex.Message });
+        }
+    }
 }
 
 public class RejectRequest
 {
     public string Reason { get; set; } = string.Empty;
+}
+
+public class UpdateUserByAdminRequest
+{
+    public string? Username { get; set; }
+    public string? Email { get; set; }
+    public string? IdentityNumber { get; set; }
+    public string? ContactNumber { get; set; }
+    public string? Address { get; set; }
+    public int Role { get; set; }
+    public bool IsApproved { get; set; }
+    public string? NewPassword { get; set; }
 }

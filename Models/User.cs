@@ -6,6 +6,8 @@ public class User
     public string Username { get; set; } = string.Empty;
     public string IdentityNumber { get; set; } = string.Empty;  // e.g., it23575776
     public string Email { get; set; } = string.Empty;
+    public string ContactNumber { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public UserRole Role { get; set; } = UserRole.PendingPlayer;
     public bool IsApproved { get; set; } = false;  // For pending players

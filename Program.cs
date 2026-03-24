@@ -317,6 +317,46 @@ static async Task InitializeDatabaseAsync(string connectionString)
                             CONSTRAINT FK_InventoryTransaction_PerformedByAdmin FOREIGN KEY (PerformedByAdminId) REFERENCES dbo.Users(Id)
                         );
                     END
+
+                    IF OBJECT_ID('dbo.PracticeSessions', 'U') IS NULL
+                    BEGIN
+                        CREATE TABLE dbo.PracticeSessions (
+                            Id INT IDENTITY(1,1) PRIMARY KEY,
+                            DayOfWeek NVARCHAR(20) NOT NULL,
+                            StartTime NVARCHAR(20) NOT NULL,
+                            EndTime NVARCHAR(20) NOT NULL,
+                            SessionType NVARCHAR(100) NOT NULL
+                        );
+                    END;
+
+                    IF OBJECT_ID('dbo.PracticeAttendance', 'U') IS NULL
+                    BEGIN
+                        CREATE TABLE dbo.PracticeAttendance (
+                            Id INT IDENTITY(1,1) PRIMARY KEY,
+                            PracticeSessionId INT NOT NULL,
+                            PlayerId INT NOT NULL,
+                            AttendanceDate DATE NOT NULL,
+                            IsPresent BIT NOT NULL DEFAULT 0,
+                            MarkedByAdminId INT NULL,
+                            MarkedAt DATETIME NOT NULL DEFAULT GETUTCDATE(),
+                            CONSTRAINT FK_PracticeAttendance_Session FOREIGN KEY (PracticeSessionId) REFERENCES dbo.PracticeSessions(Id) ON DELETE CASCADE,
+                            CONSTRAINT FK_PracticeAttendance_Player FOREIGN KEY (PlayerId) REFERENCES dbo.Users(Id) ON DELETE CASCADE,
+                            CONSTRAINT FK_PracticeAttendance_Admin FOREIGN KEY (MarkedByAdminId) REFERENCES dbo.Users(Id) ON DELETE NO ACTION,
+                            CONSTRAINT UQ_PracticeAttendance UNIQUE(PracticeSessionId, PlayerId, AttendanceDate)
+                        );
+                        CREATE INDEX idx_practiceattendance_session_date ON dbo.PracticeAttendance(PracticeSessionId, AttendanceDate);
+                        CREATE INDEX idx_practiceattendance_player_date ON dbo.PracticeAttendance(PlayerId, AttendanceDate);
+                    END;
+                    
+                    IF COL_LENGTH('dbo.Users', 'ContactNumber') IS NULL
+                    BEGIN
+                        ALTER TABLE dbo.Users ADD ContactNumber NVARCHAR(30) NULL;
+                    END;
+
+                    IF COL_LENGTH('dbo.Users', 'Address') IS NULL
+                    BEGIN
+                        ALTER TABLE dbo.Users ADD Address NVARCHAR(255) NULL;
+                    END;
                 ";
                 await command.ExecuteNonQueryAsync();
             }

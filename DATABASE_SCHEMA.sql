@@ -15,6 +15,8 @@ CREATE TABLE Users (
     Username NVARCHAR(100) NOT NULL,
     IdentityNumber NVARCHAR(50),
     Email NVARCHAR(100),
+    ContactNumber NVARCHAR(30),
+    Address NVARCHAR(255),
     PasswordHash NVARCHAR(255),
     Role INT NOT NULL,
     IsApproved BIT NOT NULL,

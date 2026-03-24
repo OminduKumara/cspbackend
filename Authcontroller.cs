@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.RegularExpressions;
 using System.Security.Claims;
 using System.Text;
 using tmsserver.Data.Repositories;
@@ -66,6 +67,8 @@ public class AuthController : ControllerBase
                 username = user.Username,
                 email = user.Email,
                 identityNumber = user.IdentityNumber,
+                contactNumber = user.ContactNumber,
+                address = user.Address,
                 role = user.Role.ToString(),
                 isApproved = user.IsApproved,
                 approvedAt = user.ApprovedAt
@@ -269,6 +272,8 @@ public class AuthController : ControllerBase
                     user.Username,
                     user.Email,
                     user.IdentityNumber,
+                    user.ContactNumber,
+                    user.Address,
                     user.Role,
                     user.IsApproved,
                     user.CreatedAt,
@@ -279,6 +284,87 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(500, new { message = "Error fetching user info", error = ex.Message });
+        }
+    }
+
+    [HttpPut("me")]
+    [Authorize]
+    public async Task<IActionResult> UpdateCurrentUser([FromBody] UpdateProfileModel model)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst("sub") ?? User.FindFirst(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdClaim?.Value, out int userId))
+            {
+                return Unauthorized(new { message = "Unable to identify user" });
+            }
+
+            var username = model.Username?.Trim() ?? string.Empty;
+            var email = model.Email?.Trim() ?? string.Empty;
+            var contactNumber = model.ContactNumber?.Trim() ?? string.Empty;
+            var address = model.Address?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email))
+            {
+                return BadRequest(new { message = "Name and email are required" });
+            }
+
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                return BadRequest(new { message = "Invalid email format" });
+            }
+
+            if (!string.IsNullOrWhiteSpace(contactNumber) && !Regex.IsMatch(contactNumber, @"^\+?[0-9\s\-]{7,15}$"))
+            {
+                return BadRequest(new { message = "Invalid phone number format" });
+            }
+
+            var existingWithUsername = await _userRepository.GetUserByUsernameAsync(username);
+            if (existingWithUsername != null && existingWithUsername.Id != userId)
+            {
+                return BadRequest(new { message = "Username is already taken" });
+            }
+
+            var existingWithEmail = await _userRepository.GetUserByEmailAsync(email);
+            if (existingWithEmail != null && existingWithEmail.Id != userId)
+            {
+                return BadRequest(new { message = "Email is already in use" });
+            }
+
+            var updated = await _userRepository.UpdateUserProfileAsync(userId, username, email, contactNumber, address);
+            if (!updated)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            return Ok(new
+            {
+                success = true,
+                message = "Profile updated successfully",
+                user = new
+                {
+                    user.Id,
+                    user.Username,
+                    user.Email,
+                    user.IdentityNumber,
+                    user.ContactNumber,
+                    user.Address,
+                    user.Role,
+                    user.IsApproved,
+                    user.CreatedAt,
+                    user.ApprovedAt
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error updating profile", error = ex.Message });
         }
     }
 
@@ -312,4 +398,12 @@ public class AuthController : ControllerBase
 public class RejectionModel
 {
     public string? Reason { get; set; }
+}
+
+public class UpdateProfileModel
+{
+    public string? Username { get; set; }
+    public string? Email { get; set; }
+    public string? ContactNumber { get; set; }
+    public string? Address { get; set; }
 }

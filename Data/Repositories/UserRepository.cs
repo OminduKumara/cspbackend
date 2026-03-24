@@ -14,6 +14,7 @@ public interface IUserRepository
     Task<List<User>> GetPendingApprovalsAsync();
     Task<User> CreateUserAsync(User user);
     Task<bool> UpdateUserAsync(User user);
+    Task<bool> UpdateUserProfileAsync(int userId, string username, string email, string contactNumber, string address);
     Task<bool> ApproveUserAsync(int userId, int approvedByAdminId);
     Task<bool> DeleteUserAsync(int id);
 }
@@ -36,7 +37,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users";
 
             using (var reader = await command.ExecuteReaderAsync())
             {
@@ -55,7 +56,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Id = @id";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Id = @id";
             command.Parameters.AddWithValue("@id", id);
 
             using (var reader = await command.ExecuteReaderAsync())
@@ -75,7 +76,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Username = @username";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Username = @username";
             command.Parameters.AddWithValue("@username", username);
 
             using (var reader = await command.ExecuteReaderAsync())
@@ -95,7 +96,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Email = @email";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Email = @email";
             command.Parameters.AddWithValue("@email", email);
 
             using (var reader = await command.ExecuteReaderAsync())
@@ -115,7 +116,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE IdentityNumber = @identityNumber";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE IdentityNumber = @identityNumber";
             command.Parameters.AddWithValue("@identityNumber", identityNumber);
 
             using (var reader = await command.ExecuteReaderAsync())
@@ -136,7 +137,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Role = @role";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Role = @role";
             command.Parameters.AddWithValue("@role", (int)role);
 
             using (var reader = await command.ExecuteReaderAsync())
@@ -157,7 +158,7 @@ public class UserRepository : IUserRepository
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Role = @role AND IsApproved = 0";
+            command.CommandText = "SELECT Id, Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, ApprovedByAdminId, CreatedAt, ApprovedAt FROM Users WHERE Role = @role AND IsApproved = 0";
             command.Parameters.AddWithValue("@role", (int)UserRole.PendingPlayer);
 
             using (var reader = await command.ExecuteReaderAsync())
@@ -178,13 +179,15 @@ public class UserRepository : IUserRepository
             await connection.OpenAsync();
             var command = connection.CreateCommand();
             command.CommandText = @"
-                INSERT INTO Users (Username, Email, IdentityNumber, PasswordHash, Role, IsApproved, CreatedAt) 
-                VALUES (@username, @email, @identityNumber, @passwordHash, @role, @isApproved, @createdAt);
+                INSERT INTO Users (Username, Email, IdentityNumber, ContactNumber, Address, PasswordHash, Role, IsApproved, CreatedAt) 
+                VALUES (@username, @email, @identityNumber, @contactNumber, @address, @passwordHash, @role, @isApproved, @createdAt);
                 SELECT SCOPE_IDENTITY();";
             
             command.Parameters.AddWithValue("@username", user.Username);
             command.Parameters.AddWithValue("@email", user.Email);
             command.Parameters.AddWithValue("@identityNumber", user.IdentityNumber);
+            command.Parameters.AddWithValue("@contactNumber", string.IsNullOrWhiteSpace(user.ContactNumber) ? (object)DBNull.Value : user.ContactNumber);
+            command.Parameters.AddWithValue("@address", string.IsNullOrWhiteSpace(user.Address) ? (object)DBNull.Value : user.Address);
             command.Parameters.AddWithValue("@passwordHash", user.PasswordHash);
             command.Parameters.AddWithValue("@role", (int)user.Role);
             command.Parameters.AddWithValue("@isApproved", user.IsApproved);
@@ -208,7 +211,7 @@ public class UserRepository : IUserRepository
             command.CommandText = @"
                 UPDATE Users 
                 SET Username = @username, Email = @email, IdentityNumber = @identityNumber, 
-                    PasswordHash = @passwordHash, Role = @role, IsApproved = @isApproved, 
+                    ContactNumber = @contactNumber, Address = @address, PasswordHash = @passwordHash, Role = @role, IsApproved = @isApproved, 
                     ApprovedByAdminId = @approvedByAdminId, ApprovedAt = @approvedAt
                 WHERE Id = @id";
             
@@ -216,11 +219,38 @@ public class UserRepository : IUserRepository
             command.Parameters.AddWithValue("@username", user.Username);
             command.Parameters.AddWithValue("@email", user.Email);
             command.Parameters.AddWithValue("@identityNumber", user.IdentityNumber);
+            command.Parameters.AddWithValue("@contactNumber", string.IsNullOrWhiteSpace(user.ContactNumber) ? (object)DBNull.Value : user.ContactNumber);
+            command.Parameters.AddWithValue("@address", string.IsNullOrWhiteSpace(user.Address) ? (object)DBNull.Value : user.Address);
             command.Parameters.AddWithValue("@passwordHash", user.PasswordHash);
             command.Parameters.AddWithValue("@role", (int)user.Role);
             command.Parameters.AddWithValue("@isApproved", user.IsApproved);
             command.Parameters.AddWithValue("@approvedByAdminId", user.ApprovedByAdminId ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@approvedAt", user.ApprovedAt ?? (object)DBNull.Value);
+
+            var result = await command.ExecuteNonQueryAsync();
+            return result > 0;
+        }
+    }
+
+    public async Task<bool> UpdateUserProfileAsync(int userId, string username, string email, string contactNumber, string address)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                UPDATE Users
+                SET Username = @username,
+                    Email = @email,
+                    ContactNumber = @contactNumber,
+                    Address = @address
+                WHERE Id = @id";
+
+            command.Parameters.AddWithValue("@id", userId);
+            command.Parameters.AddWithValue("@username", username);
+            command.Parameters.AddWithValue("@email", email);
+            command.Parameters.AddWithValue("@contactNumber", string.IsNullOrWhiteSpace(contactNumber) ? (object)DBNull.Value : contactNumber);
+            command.Parameters.AddWithValue("@address", string.IsNullOrWhiteSpace(address) ? (object)DBNull.Value : address);
 
             var result = await command.ExecuteNonQueryAsync();
             return result > 0;
@@ -271,6 +301,8 @@ public class UserRepository : IUserRepository
             Username = reader.GetString(reader.GetOrdinal("Username")),
             Email = reader.GetString(reader.GetOrdinal("Email")),
             IdentityNumber = reader.GetString(reader.GetOrdinal("IdentityNumber")),
+            ContactNumber = reader.IsDBNull(reader.GetOrdinal("ContactNumber")) ? string.Empty : reader.GetString(reader.GetOrdinal("ContactNumber")),
+            Address = reader.IsDBNull(reader.GetOrdinal("Address")) ? string.Empty : reader.GetString(reader.GetOrdinal("Address")),
             PasswordHash = reader.IsDBNull(reader.GetOrdinal("PasswordHash")) ? string.Empty : reader.GetString(reader.GetOrdinal("PasswordHash")),
             Role = (UserRole)reader.GetInt32(reader.GetOrdinal("Role")),
             IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
