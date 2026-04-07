@@ -14,15 +14,18 @@ public class AdminController : ControllerBase
     private readonly tmsserver.Services.IAuthorizationService _authorizationService;
     private readonly IUserRepository _userRepository;
     private readonly IRegistrationRequestRepository _registrationRequestRepository;
+    private readonly PracticeSessionRepository _practiceSessionRepository;
 
     public AdminController(
         tmsserver.Services.IAuthorizationService authorizationService,
         IUserRepository userRepository,
-        IRegistrationRequestRepository registrationRequestRepository)
+        IRegistrationRequestRepository registrationRequestRepository,
+        PracticeSessionRepository practiceSessionRepository)
     {
         _authorizationService = authorizationService;
         _userRepository = userRepository;
         _registrationRequestRepository = registrationRequestRepository;
+        _practiceSessionRepository = practiceSessionRepository;
     }
 
     /// <summary>
@@ -106,7 +109,6 @@ public class AdminController : ControllerBase
     {
         try
         {
-            // Get admin ID from JWT token
             var adminIdClaim = User.FindFirst("sub") 
                 ?? User.FindFirst(ClaimTypes.NameIdentifier)
                 ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
@@ -117,14 +119,12 @@ public class AdminController : ControllerBase
                 return Unauthorized(new { message = "Unable to identify admin" });
             }
 
-            // Verify admin is admin or system admin
             var admin = await _userRepository.GetUserByIdAsync(adminId);
             if (admin?.Role != UserRole.Admin && admin?.Role != UserRole.SystemAdmin)
             {
                 return Forbid("You don't have permission to approve players");
             }
 
-            // Approve the user
             var approved = await _authorizationService.ApproveUserAsync(userId, adminId);
             
             if (approved)
@@ -166,7 +166,6 @@ public class AdminController : ControllerBase
                 return BadRequest(new { message = "Rejection reason is required" });
             }
 
-            // Get admin ID from JWT token
             var adminIdClaim = User.FindFirst("sub")
                 ?? User.FindFirst(ClaimTypes.NameIdentifier)
                 ?? User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
@@ -177,14 +176,12 @@ public class AdminController : ControllerBase
                 return Unauthorized(new { message = "Unable to identify admin" });
             }
 
-            // Verify admin is admin or system admin
             var admin = await _userRepository.GetUserByIdAsync(adminId);
             if (admin?.Role != UserRole.Admin && admin?.Role != UserRole.SystemAdmin)
             {
                 return Forbid("You don't have permission to reject players");
             }
 
-            // Reject the user
             var rejected = await _authorizationService.RejectUserAsync(userId, adminId, request.Reason);
 
             if (rejected)
@@ -406,6 +403,35 @@ public class AdminController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(500, new { message = "Error updating user", error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Generate PDF-ready attendance report data
+    /// </summary>
+    [HttpGet("reports/attendance")]
+    public IActionResult GenerateAttendanceReport([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+    {
+        try
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest(new { message = "Start date cannot be after the end date." });
+            }
+
+            // Call the repository method
+            var reportData = _practiceSessionRepository.GetAttendanceReport(startDate, endDate);
+
+            return Ok(new 
+            { 
+                success = true,
+                message = "Report generated successfully",
+                data = reportData 
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error generating report", error = ex.Message });
         }
     }
 }

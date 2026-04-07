@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Data.SqlClient; 
 using Microsoft.Extensions.Configuration;
 using tmsserver.Models;
+using tmsserver.DTOs;
 
 namespace tmsserver.Data.Repositories
 {
@@ -57,7 +58,6 @@ namespace tmsserver.Data.Repositories
                 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 
-                // Using parameters prevents SQL Injection attacks!
                 cmd.Parameters.AddWithValue("@DayOfWeek", session.DayOfWeek);
                 cmd.Parameters.AddWithValue("@StartTime", session.StartTime);
                 cmd.Parameters.AddWithValue("@EndTime", session.EndTime);
@@ -82,7 +82,6 @@ namespace tmsserver.Data.Repositories
                 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 
-                // The Id parameter is crucial here so Azure knows exactly which row to update
                 cmd.Parameters.AddWithValue("@Id", session.Id);
                 cmd.Parameters.AddWithValue("@DayOfWeek", session.DayOfWeek);
                 cmd.Parameters.AddWithValue("@StartTime", session.StartTime);
@@ -107,6 +106,59 @@ namespace tmsserver.Data.Repositories
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        // 5. GET ATTENDANCE REPORT
+        public List<PlayerAttendanceReportDto> GetAttendanceReport(DateTime startDate, DateTime endDate)
+        {
+            var reportData = new List<PlayerAttendanceReportDto>();
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT 
+                        u.Id AS PlayerId,
+                        u.Username AS PlayerName,
+                        u.IdentityNumber,
+                        COUNT(pa.Id) AS TotalSessionsScheduled,
+                        SUM(CASE WHEN pa.IsPresent = 1 THEN 1 ELSE 0 END) AS SessionsAttended
+                    FROM Users u
+                    INNER JOIN PracticeAttendance pa ON u.Id = pa.PlayerId
+                    WHERE u.Role = @playerRole 
+                      AND pa.AttendanceDate >= @StartDate 
+                      AND pa.AttendanceDate <= @EndDate
+                    GROUP BY u.Id, u.Username, u.IdentityNumber
+                    HAVING COUNT(pa.Id) > 0"; 
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@playerRole", (int)UserRole.Player); 
+                cmd.Parameters.AddWithValue("@StartDate", startDate.Date);
+                cmd.Parameters.AddWithValue("@EndDate", endDate.Date);
+
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var stat = new PlayerAttendanceReportDto
+                        {
+                            PlayerId = Convert.ToInt32(reader["PlayerId"]),
+                            // ADDED DEFENSIVE DBNull CHECKS HERE
+                            PlayerName = reader["PlayerName"] == DBNull.Value ? "Unknown" : reader["PlayerName"].ToString(),
+                            IdentityNumber = reader["IdentityNumber"] == DBNull.Value ? "N/A" : reader["IdentityNumber"].ToString(),
+                            TotalSessionsScheduled = Convert.ToInt32(reader["TotalSessionsScheduled"]),
+                            SessionsAttended = Convert.ToInt32(reader["SessionsAttended"])
+                        };
+
+                        stat.AttendancePercentage = Math.Round(
+                            ((double)stat.SessionsAttended / stat.TotalSessionsScheduled) * 100, 2);
+
+                        reportData.Add(stat);
+                    }
+                }
+            }
+
+            return reportData.OrderBy(r => r.AttendancePercentage).ToList();
         }
 
         public List<PracticeAttendanceRow> GetAttendanceForSessionDate(int sessionId, DateTime attendanceDate)
@@ -287,6 +339,7 @@ namespace tmsserver.Data.Repositories
         }
     }
 
+    // HELPER CLASSES
     public class PracticeAttendanceRow
     {
         public int Id { get; set; }

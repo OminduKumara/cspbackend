@@ -76,3 +76,9 @@
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/obj/Debug/net10.0/ref/tmsserver.dll
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/DotNetEnv.dll
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/Sprache.dll
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/temp-build-output/appsettings.Development.json
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/temp-build-output/appsettings.json
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/temp-build-output/launchSettings.json
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/temp-build-output/tmsserver.deps.json
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/temp-build-output/tmsserver.runtimeconfig.json
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/bin/Debug/net10.0/temp-build-output/tmsserver.staticwebassets.endpoints.json
