@@ -13,8 +13,9 @@ public class InventoryRepository : IInventoryRepository
 
     public InventoryRepository(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection") 
-            ?? Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING") 
+        _connectionString = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING")
+            ?? configuration["AZURE_SQL_CONNECTIONSTRING"]
+            ?? configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string not found");
     }
 
