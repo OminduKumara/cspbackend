@@ -8,7 +8,20 @@ using tmsserver.DTOs;
 
 namespace tmsserver.Data.Repositories
 {
-    public class PracticeSessionRepository
+    public interface IPracticeSessionRepository
+    {
+        List<PracticeSession> GetAllSessions();
+        void AddSession(PracticeSession session);
+        void UpdateSession(PracticeSession session);
+        void DeleteSession(int id);
+        List<PlayerAttendanceReportDto> GetAttendanceReport(DateTime startDate, DateTime endDate);
+        List<PracticeAttendanceRow> GetAttendanceForSessionDate(int sessionId, DateTime attendanceDate);
+        void UpsertAttendanceRecords(int sessionId, DateTime attendanceDate, int adminId, List<PracticeAttendanceSaveItem> items);
+        List<PracticeAttendanceReportRow> GetAttendanceMissReport();
+        List<PlayerAttendanceViewRow> GetAttendanceForPlayer(int playerId);
+    }
+
+    public class PracticeSessionRepository : IPracticeSessionRepository
     {
         private readonly string _connectionString;
 

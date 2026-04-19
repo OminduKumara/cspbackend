@@ -1,4 +1,4 @@
-Using launch settings from /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Properties/launchSettings.json...
+Using launch settings from Properties/launchSettings.json...
 Building...
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-wvxc-855f-jvrv
@@ -8,6 +8,31 @@ Building...
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Azure.Identity' 1.10.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-wvxc-855f-jvrv
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1902: Package 'Microsoft.Identity.Client' 4.56.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9
 /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj : warning NU1901: Package 'Microsoft.Identity.Client' 4.56.0 has a known low severity vulnerability, https://github.com/advisories/GHSA-x674-v45j-fwxw
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Controllers/HealthController.cs(16,33): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Controllers/HealthController.cs(14,16): warning CS8618: Non-nullable field '_connectionString' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Controllers/PlayerController.cs(17,29): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Controllers/PlayerController.cs(15,12): warning CS8618: Non-nullable field '_connectionString' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Services/HealthMonitorService.cs(21,33): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Services/HealthMonitorService.cs(17,16): warning CS8618: Non-nullable field '_connectionString' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/TournamentsController.cs(267,17): warning CS8602: Dereference of a possibly null reference. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Controllers/HealthController.cs(138,49): warning CS8600: Converting null literal or possible null value to non-nullable type. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/TournamentsController.cs(352,17): warning CS8602: Dereference of a possibly null reference. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Models/Tournament.cs(35,19): warning CS8618: Non-nullable property 'Status' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/InventoryController.cs(14,53): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/InventoryController.cs(344,27): warning CS8618: Non-nullable property 'Comment' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/InventoryController.cs(336,27): warning CS8618: Non-nullable property 'Comment' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(18,33): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(16,16): warning CS8618: Non-nullable field '_connectionString' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(40,41): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(41,41): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(42,39): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(43,43): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(147,42): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/PracticeSessionRepository.cs(148,46): warning CS8601: Possible null reference assignment. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/TournamentTeamRepository.cs(90,23): warning CS8605: Unboxing a possibly null value. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/Data/Repositories/TournamentMatchRepository.cs(144,24): warning CS8605: Unboxing a possibly null value. [/Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver/tmsserver.csproj]
+info: tmsserver.Services.HealthMonitorService[0]
+      Health Monitor Background Service is starting.
 info: Microsoft.Hosting.Lifetime[14]
       Now listening on: http://localhost:5011
 info: Microsoft.Hosting.Lifetime[0]
@@ -16,3 +41,47 @@ info: Microsoft.Hosting.Lifetime[0]
       Hosting environment: Development
 info: Microsoft.Hosting.Lifetime[0]
       Content root path: /Users/omindu/Documents/sliit/cspproject/CSP-Group-4/server/tmsserver
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: tmsserver.Services.HealthMonitorService[0]
+      Logged system health status: Healthy
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...

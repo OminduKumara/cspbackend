@@ -14,13 +14,13 @@ public class AdminController : ControllerBase
     private readonly tmsserver.Services.IAuthorizationService _authorizationService;
     private readonly IUserRepository _userRepository;
     private readonly IRegistrationRequestRepository _registrationRequestRepository;
-    private readonly PracticeSessionRepository _practiceSessionRepository;
+    private readonly IPracticeSessionRepository _practiceSessionRepository;
 
     public AdminController(
         tmsserver.Services.IAuthorizationService authorizationService,
         IUserRepository userRepository,
         IRegistrationRequestRepository registrationRequestRepository,
-        PracticeSessionRepository practiceSessionRepository)
+        IPracticeSessionRepository practiceSessionRepository)
     {
         _authorizationService = authorizationService;
         _userRepository = userRepository;

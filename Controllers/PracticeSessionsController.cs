@@ -15,13 +15,13 @@ namespace tmsserver.Controllers
     [ApiController]
     public class PracticeSessionsController : ControllerBase
     {
-        private readonly PracticeSessionRepository _repository;
+        private readonly IPracticeSessionRepository _repository;
         private readonly IUserRepository _userRepository;
 
         // We pull the configuration to pass the connection string down to the repository
-        public PracticeSessionsController(IConfiguration configuration, IUserRepository userRepository)
+        public PracticeSessionsController(IPracticeSessionRepository repository, IUserRepository userRepository)
         {
-            _repository = new PracticeSessionRepository(configuration);
+            _repository = repository;
             _userRepository = userRepository;
         }
 
